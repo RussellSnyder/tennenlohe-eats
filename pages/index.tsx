@@ -5,6 +5,7 @@ import Layout from '../components/Layout'
 import RestaurantPreview from '../components/Restaurants/RestaurantPreview';
 import { ContentfulContentType, Food, FoodTruck, Restaurant } from '../interfaces';
 import { extractEntryFields } from '../utils/contentfulParser';
+import { dayOfTheWeekToInt } from '../utils/time';
 import { fetchEntries } from './api/contentfulPosts';
 
 interface AppProps {
@@ -89,6 +90,12 @@ export async function getStaticProps() {
     }
 
     const foodTrucks = extractEntryFields<FoodTruck>(res, ContentfulContentType.FoodTruck);
+    foodTrucks.sort((a, b) => {
+      const aDay = dayOfTheWeekToInt(a.availableDay);
+      const bDay = dayOfTheWeekToInt(b.availableDay);
+      return aDay < bDay ? -1 : 1;
+    })
+
     const restaurants = extractEntryFields<Food>(res, ContentfulContentType.Restaurant);
     const foods = extractEntryFields<Food>(res, ContentfulContentType.Food);
 

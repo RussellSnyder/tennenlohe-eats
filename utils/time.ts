@@ -6,5 +6,22 @@ export const getTime = (dateString: string) => {
   
     return `${hours}:${minutes}`;
   }
+
+export const dayOfTheWeekToInt = (dayOfWeek: string): number => {
+  switch (dayOfWeek.toLocaleLowerCase()) {
+    case 'monday':
+      return 1
+    case 'tuesday':
+      return 2
+    case 'wednesday':
+      return 3
+    case 'thursday':
+      return 4
+    case 'friday':
+      return 5
+    default:
+      return 0
+  }
+}
   
   
