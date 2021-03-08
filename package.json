@@ -1,22 +1,25 @@
 {
-  "name": "with-typescript",
+  "name": "tennenlohe-food",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 8081",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc"
   },
   "dependencies": {
-    "next": "latest",
+    "bootstrap": "^4.6.0",
+    "contentful": "^8.1.8",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "sass": "^1.32.8"
   },
   "devDependencies": {
-    "@types/node": "^12.12.21",
-    "@types/react": "^17.0.2",
+    "@types/node": "^12.20.4",
+    "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.1",
-    "typescript": "4.0"
+    "next": "^10.0.8",
+    "typescript": "^4.0.7"
   },
   "license": "MIT"
 }
