@@ -1,7 +1,10 @@
-import Link from 'next/link'
+import React, { useEffect, useState } from 'react';
+import FoodFilter from '../components/FoodFilter';
+import FoodTruckPreview from '../components/FoodTruck/FoodTruckPreview';
 import Layout from '../components/Layout'
+import RestaurantPreview from '../components/Restaurants/RestaurantPreview';
 import { ContentType, Food, FoodTruck, Restaurant } from '../interfaces';
-import { extractEntryFields, extractFoodTrucks } from '../utils/contentfulParser';
+import { extractEntryFields } from '../utils/contentfulParser';
 import { fetchEntries } from './api/contentfulPosts';
 
 interface AppProps {
@@ -10,73 +13,70 @@ interface AppProps {
   restaurants: Restaurant[]
 }
 
-const getTime = (dateString: string) => {
-  var myDate = new Date(dateString);
+const FoodTruckSection = ({ foodTrucks, chosenFood }: { foodTrucks: FoodTruck[], chosenFood?: Food } ) => (
+  <section className="text-center text-sm-left food-trucks my-4">
+    <h2 className="ml-lg-5 mb-3">Food Trucks</h2>
+    {foodTrucks.length > 0 || !chosenFood
+      ? foodTrucks.map(FoodTruckPreview) 
+      : `No Food Trucks Available With "${chosenFood.name}"`
+    }
+  </section>
+)
 
-  var minutes = myDate.getMinutes();
-  var hours = myDate.getHours();
+const RestaurantSection = ({ restaurants, chosenFood }: { restaurants: Restaurant[], chosenFood?: Food } ) => (
+  <section className="text-center text-sm-left restaurants my-4">
+    <h2 className="ml-lg-5 mb-3">Restaurants</h2>
+    {restaurants.length > 0 || !chosenFood
+      ? restaurants.map(RestaurantPreview)
+      : `No Restaurants Available With "${chosenFood.name}"`
+    }
+  </section>
+)
 
-  return `${hours}:${minutes}`;
+const App = ({foodTrucks, foods, restaurants}: AppProps) => {
+  const [chosenFood, setChosenFood] = useState<Food>();
+  const [filteredFoodTrucks, setFilteredFoodTrucks] = useState<FoodTruck[]>(foodTrucks);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>(restaurants);
+
+  useEffect(() => {
+    if (!chosenFood) {
+      setFilteredFoodTrucks(foodTrucks);
+      setFilteredRestaurants(restaurants);
+      return;
+    }
+
+    const foodTrucksWithChosenFood = foodTrucks.filter(f => {
+      {/*
+      // @ts-ignore*/}
+      return f.foodsAvailable.some((food) => food.fields.name === chosenFood.name);
+    })
+
+    setFilteredFoodTrucks(foodTrucksWithChosenFood);
+
+    const restaurantsWithChosenFood = restaurants.filter(r => {
+      {/*
+          // @ts-ignore*/}
+      return r.foodsAvailable.some((food) => food.fields.name === chosenFood.name);
+    })
+    
+    setFilteredRestaurants(restaurantsWithChosenFood);
+  }, [chosenFood])
+
+  function handleFilter(food: Food) {
+    setChosenFood(food);
+  }
+
+  return (
+    <Layout title="Tennenlohe Food | Get Your Grub On!">
+      <div className="row">
+        <h1 className="col-12 main-title text-center my-4">Tennenlohe Food</h1>
+      </div>
+      <FoodFilter chosenFood={chosenFood} foods={foods} handleFilter={(food: Food) => handleFilter(food)} />
+      <FoodTruckSection foodTrucks={filteredFoodTrucks} chosenFood={chosenFood} />
+      <RestaurantSection restaurants={filteredRestaurants} chosenFood={chosenFood} />
+    </Layout>
+  )
 }
-
-
-const FoodTruckDisplay = ({name, address, logo, availableDay, availableStart, availableEnd}: FoodTruck) => (
-  <div className="row" key={name}>
-    <div className="col-sm-3">
-      <img className="img-fluid" src={logo.fields.file.url} alt={logo.fields.title}/>
-    </div>
-    <div className="col-cm-9">
-      <h3>{availableDay}s {getTime(availableStart)}-{getTime(availableEnd)}</h3>
-      <h2>{name}</h2>
-    </div>
-  </div>
-)
-
-const RestaurantDisplay = ({name, address, logo}: Restaurant) => (
-  <div className="row" key={name}>
-    <div className="col-sm-3">
-      <img className="img-fluid" src={logo.fields.file.url} alt={logo.fields.title}/>
-    </div>
-    <div className="col-cm-9">
-      <h2>{name}</h2>
-      <h3>{address}</h3>
-    </div>
-  </div>
-)
-
-
-const FoodTruckSection = ({ foodTrucks}: { foodTrucks: FoodTruck[] } ) => (
-  <section className="food-trucks">
-    <h2>Food Trucks</h2>
-    {foodTrucks.map(FoodTruckDisplay)}
-  </section>
-)
-
-const RestaurantSection = ({ restaurants }: { restaurants: Restaurant[] } ) => (
-  <section className="restaurants">
-    <h2>Restaurants</h2>
-    {restaurants.map(RestaurantDisplay)}
-  </section>
-)
-
-const FoodsSection = ({ foods }: { foods: Food[] } ) => (
-  <section className="foods">
-    <h2>Foods</h2>
-    TODO: show foodtruck/resto based on food selection
-    {foods.map(f => JSON.stringify(f))}
-  </section>
-)
-
-
-
-const App = ({foodTrucks, foods, restaurants}: AppProps) => (
-  <Layout title="Tennenlohe Food | Get Your Grub On!">
-    <h1>Tennenlohe Food</h1>
-    <FoodTruckSection foodTrucks={foodTrucks} />
-    <RestaurantSection restaurants={restaurants} />
-    <FoodsSection foods={foods} />
-  </Layout>
-)
 
 export default App
 

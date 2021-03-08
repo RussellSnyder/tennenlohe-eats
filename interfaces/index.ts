@@ -10,11 +10,8 @@ export enum ContentType {
 }
 
 export interface Food {
-  sys: Object,
-  fields: {
-    name: string,
-    nameDe: string
-  }
+  name: string,
+  nameDe: string
 }
 
 interface FoodPlace {

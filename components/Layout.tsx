@@ -8,7 +8,7 @@ type Props = {
 }
 
 const Layout = ({ children, title = 'Tennenlohe Food' }: Props) => (
-  <div className="container">
+  <div className="app-container container">
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
@@ -16,7 +16,6 @@ const Layout = ({ children, title = 'Tennenlohe Food' }: Props) => (
     </Head>
     {children}
     <footer className="text-center">
-      <hr />
       <span>Get Your Grub On</span>
     </footer>
   </div>

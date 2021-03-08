@@ -1,1 +1,36 @@
+// Font Variables
+$header-font: 'Galindo', cursive;
+$mp-orange: #E47E00;
+$mp-blue: #003C71;
+
+$theme-colors: (
+  "primary": $mp-orange,
+  "secondary": $mp-blue,
+);
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+@import url('https://fonts.googleapis.com/css2?family=Galindo&display=swap');
+
+
+.main-title {
+    font-family: $header-font;
+    font-size: 5rem;
+    color: $mp-blue;
+}
+
+h2 {
+    font-family: $header-font;
+    font-size: 3rem;
+    color: $mp-blue;
+}
+
+body {
+    background: $mp-orange;
+}
+
+.app-container {
+    background: white;
+    opacity: 0.9;
+    min-height: 100vh;
+    padding-bottom: 3rem;
+}
