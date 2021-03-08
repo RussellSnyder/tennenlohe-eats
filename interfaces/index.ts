@@ -1,9 +1,4 @@
-export type User = {
-  id: number
-  name: string
-}
-
-export enum ContentType {
+export enum ContentfulContentType {
   Restaurant = 'restaurants',
   FoodTruck = 'foodTruck',
   Food = 'food',

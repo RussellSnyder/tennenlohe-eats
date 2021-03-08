@@ -3,7 +3,7 @@ import FoodFilter from '../components/FoodFilter';
 import FoodTruckPreview from '../components/FoodTruck/FoodTruckPreview';
 import Layout from '../components/Layout'
 import RestaurantPreview from '../components/Restaurants/RestaurantPreview';
-import { ContentType, Food, FoodTruck, Restaurant } from '../interfaces';
+import { ContentfulContentType, Food, FoodTruck, Restaurant } from '../interfaces';
 import { extractEntryFields } from '../utils/contentfulParser';
 import { fetchEntries } from './api/contentfulPosts';
 
@@ -88,9 +88,9 @@ export async function getStaticProps() {
       return;
     }
 
-    const foodTrucks = extractEntryFields<FoodTruck>(res, ContentType.FoodTruck);
-    const restaurants = extractEntryFields<Food>(res, ContentType.Restaurant);
-    const foods = extractEntryFields<Food>(res, ContentType.Food);
+    const foodTrucks = extractEntryFields<FoodTruck>(res, ContentfulContentType.FoodTruck);
+    const restaurants = extractEntryFields<Food>(res, ContentfulContentType.Restaurant);
+    const foods = extractEntryFields<Food>(res, ContentfulContentType.Food);
 
     return {
       props: {
